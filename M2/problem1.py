@@ -15,7 +15,7 @@ def process_array(num, arr):
     print(arr)
     print("\nOdds output:\n")
     # TODO add necessary print statement to output only the odd values (hint, best if shown as a single line)
-    #
+    #Printing odd number in the list
     for i in arr: print(i,end=',') if i%2 !=0 else print(end='') 
 
 print("Problem 1")
