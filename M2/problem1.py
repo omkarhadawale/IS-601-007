@@ -1,3 +1,9 @@
+'''
+Name: Omkar Karbhari Hadawale
+UCID: oh45
+Date:20/09/2022 
+
+'''
 a1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 a2 = [0, 1, 3, 5, 7, 9, 2, 4, 6, 8, 10]
 a3 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
@@ -9,7 +15,8 @@ def process_array(num, arr):
     print(arr)
     print("\nOdds output:\n")
     # TODO add necessary print statement to output only the odd values (hint, best if shown as a single line)
-
+    #
+    for i in arr: print(i,end=',') if i%2 !=0 else print(end='') 
 
 print("Problem 1")
 process_array(1, a1)
