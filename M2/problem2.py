@@ -1,3 +1,10 @@
+'''
+Name: Omkar Karbhari Hadawale
+UCID: oh45
+Date:20/09/2022 
+
+'''
+
 a1 = [10.001, 11.591, 0.011, 5.991, 16.121, 0.131, 100.981, 1.001]
 a2 = [1.99, 1.99, 0.99, 1.99, 0.99, 1.99, 0.99, 0.99]
 a3 = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
@@ -9,7 +16,8 @@ def process_array(num, arr):
     print(arr)
     total = 0.00
     # TODO add necessary code here for sum; every number must have two decimal places shown
-    print("\nThe total is {}:\n".format(total))
+    total = sum(arr) #Calculating sum of all elements in the list
+    print("\nThe total is {:.2f}:\n".format(total))
 
 
 print("Problem 2")
