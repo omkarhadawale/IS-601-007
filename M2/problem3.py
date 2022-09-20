@@ -1,3 +1,10 @@
+'''
+Name: Omkar Karbhari Hadawale
+UCID: oh45
+Date:20/09/2022 
+
+'''
+
 a1 = [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10]
 a2 = [-1, 1, -2, 2, 3, -3, -4, 5]
 a3 = [-0.01, -0.0001, -.15]
@@ -9,6 +16,7 @@ def process_array(num, arr):
     print(arr)
     print("\nPositive Output:\n")
     # TODO add new code here to print the desired result
+    for i in arr: print(i,end=', ') if float(i) > 0.0 else print(end='') #Printing only positive values from the list
 
 
 print("Problem 3")
