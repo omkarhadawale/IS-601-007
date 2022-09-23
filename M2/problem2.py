@@ -17,7 +17,7 @@ def process_array(num, arr):
     total = 0.00
     # TODO add necessary code here for sum; every number must have two decimal places shown
     total = sum(arr) #Calculating sum of all elements in the list
-    print("\nThe total is {:.2f}:\n".format(total))
+    print("\nThe total is {:.2f}:\n".format(round(total,2)))
 
 
 print("Problem 2")
