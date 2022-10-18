@@ -1,6 +1,6 @@
 from enum import Enum
-from IceceamExceptions import ExceededRemainingChoicesException, InvalidChoiceException, NeedsCleaningException, OutOfStockException
-from IceceamExceptions import InvalidPaymentException
+from IcecreamExceptions import ExceededRemainingChoicesException, InvalidChoiceException, NeedsCleaningException, OutOfStockException
+from IcecreamExceptions import InvalidPaymentException
 
 class Usable:
     name = ""
@@ -140,22 +140,54 @@ class IceCreamMachine:
             
     def calculate_cost(self):
         # TODO add the calculation expression/logic for the inprogress_icecream
-        return 10000
+        total_cost = 0
+        for i in self.inprogress_icecream:
+            total_cost += i.cost
+        return total_cost
 
     def run(self):
         if self.currently_selecting == STAGE.Container:
             container = input(f"Would you like a {', '.join(list(map(lambda c:c.name.lower(), filter(lambda c: c.in_stock(), self.containers))))}?\n")
-            self.handle_container(container)
+            try:
+                self.handle_container(container)
+            except InvalidChoiceException:
+                print("Invalid Choice.Please select valid choice from below list")
+                self.run()
         elif self.currently_selecting == STAGE.Flavor:
             flavor = input(f"Would you like {', '.join(list(map(lambda f:f.name.lower(), filter(lambda f: f.in_stock(), self.flavors))))}? Or type next.\n")
-            self.handle_flavor(flavor)
+            try:
+                self.handle_flavor(flavor)
+            except InvalidChoiceException:
+                print("Invalid Choice.Please select valid choice from below list")
+                self.run()
+            except NeedsCleaningException:
+                print("The machine is being cleaned....Sorry for inconvinience")
+                self.clean_machine()
+                print("Please again make a choice")
+                self.run()
+            except ExceededRemainingChoicesException:
+                print(f"Max Scoops exceeded. You can select maximum of {self.MAX_SCOOPS}scoops.\nPlease go ahead and select toppings")
+                self.currently_selecting = STAGE.Toppings
+                self.run()    
         elif self.currently_selecting == STAGE.Toppings:
             toppings = input(f"Would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n")
-            self.handle_toppings(toppings)
+            try:
+                self.handle_toppings(toppings)
+            except InvalidChoiceException:
+                print("Invalid Choice.Please select valid choice from below list")
+                self.run()
+            except ExceededRemainingChoicesException:
+                print(f"Max toppings exceeded. You can select maximum of {self.MAX_SCOOPS} toppings.\nPlease checkout and make payment")
+                self.currently_selecting = STAGE.Pay
+                self.run()    
         elif self.currently_selecting == STAGE.Pay:
             expected = self.calculate_cost()
             total = input(f"Your total is {expected}, please enter the exact value.\n")
-            self.handle_pay(expected, total)
+            try:
+                self.handle_pay(expected, total)
+            except InvalidPaymentException:
+                print(f"Please enter the correct amount.\nYou are expected to pay ${expected} but you entered ${total}")
+                self.run()
             choice = input("What would you like to do? (icecream or quit)\n")
             if choice == "quit":
                 exit()
