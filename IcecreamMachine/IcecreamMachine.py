@@ -1,3 +1,10 @@
+'''
+Name: Omkar Karbhari Hadawale
+UCID: oh45
+Date:23/10/2022 
+
+'''
+
 from enum import Enum
 from IcecreamExceptions import ExceededRemainingChoicesException, InvalidChoiceException, NeedsCleaningException, OutOfStockException
 from IcecreamExceptions import InvalidPaymentException
@@ -138,6 +145,12 @@ class IceCreamMachine:
         else:
             raise InvalidPaymentException
             
+        ''' 
+        Name: Omkar Karbhari Hadawale
+        UCID: oh45
+        This function calculates cost of current ice cream by interating over in 
+        inprogress_icecream list and addind up cost element in each object in the list
+        '''       
     def calculate_cost(self):
         # TODO add the calculation expression/logic for the inprogress_icecream
         total_cost = 0
@@ -146,8 +159,16 @@ class IceCreamMachine:
         return total_cost
 
     def run(self):
+        
         if self.currently_selecting == STAGE.Container:
             container = input(f"Would you like a {', '.join(list(map(lambda c:c.name.lower(), filter(lambda c: c.in_stock(), self.containers))))}?\n")
+            ''' 
+            Name: Omkar Karbhari Hadawale
+            UCID: oh45
+            1)InvalidChoiceException: The InvalidChoiceException is handled by try except block.
+            When the exception is thrown the user is given appropriate message and the run()
+            is called again to ask user for another input.  
+            '''    
             try:
                 self.handle_container(container)
             except InvalidChoiceException:
@@ -155,6 +176,21 @@ class IceCreamMachine:
                 self.run()
         elif self.currently_selecting == STAGE.Flavor:
             flavor = input(f"Would you like {', '.join(list(map(lambda f:f.name.lower(), filter(lambda f: f.in_stock(), self.flavors))))}? Or type next.\n")
+            ''' 
+            Name: Omkar Karbhari Hadawale
+            UCID: oh45
+            1)InvalidChoiceException: The InvalidChoiceException is handled by try except block.
+                When the exception is thrown the user is given appropriate message and the run()
+                is called again to ask user for another input.
+            2)NeedsCleaningException:This exception is handled by the "except NeedsCleaningException:" 
+                block.When the NeedsCleaningException is thrown the user is prompted that the machine is
+                cleaned and the clean_machine() is called.Their after the run() is called recursively to
+                ask user to make the choice again    
+            3)ExceededRemainingChoicesException:This exception is handled by the "except ExceededRemainingChoicesException:" 
+                block.When the exception is thrown the user is prompted that you have exceeded the maximum limit to select 
+                the item and the user is directed to the next stage by setting the currently_selecting variable to next stage 
+                and calling run() recursively.
+            ''' 
             try:
                 self.handle_flavor(flavor)
             except InvalidChoiceException:
@@ -171,6 +207,17 @@ class IceCreamMachine:
                 self.run()    
         elif self.currently_selecting == STAGE.Toppings:
             toppings = input(f"Would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n")
+            ''' 
+            Name: Omkar Karbhari Hadawale
+            UCID: oh45
+            1)InvalidChoiceException: The InvalidChoiceException is handled by try except block.
+                When the exception is thrown the user is given appropriate message and the run()
+                is called again to ask user for another input.
+            2)ExceededRemainingChoicesException:This exception is handled by the "except ExceededRemainingChoicesException:" 
+                block.When the exception is thrown the user is prompted that you have exceeded the maximum limit to select 
+                the item and the user is directed to the next stage by setting the currently_selecting variable to next stage 
+                and calling run() recursively.
+            ''' 
             try:
                 self.handle_toppings(toppings)
             except InvalidChoiceException:
@@ -183,6 +230,13 @@ class IceCreamMachine:
         elif self.currently_selecting == STAGE.Pay:
             expected = self.calculate_cost()
             total = input(f"Your total is {expected}, please enter the exact value.\n")
+            ''' 
+            Name: Omkar Karbhari Hadawale
+            UCID: oh45
+            1)InvalidPaymentException: The InvalidChoiceException is handled by try except block.
+                When the exception is thrown the user is to ask user to enter exact amount to complete the payment
+                and the run() is called again recursively till the user enters exact value.
+            ''' 
             try:
                 self.handle_pay(expected, total)
             except InvalidPaymentException:
