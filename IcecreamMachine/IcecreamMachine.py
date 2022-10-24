@@ -92,7 +92,7 @@ class IceCreamMachine:
         if self.remaining_scoops <= 0:
             raise ExceededRemainingChoicesException
         for f in self.flavors:
-            if f.name.lower() == choice:
+            if f.name.lower() == choice and self.currently_selecting == STAGE.Flavor:
                 f.use()
                 self.inprogress_icecream.append(f)
                 self.remaining_scoops -= 1
@@ -104,7 +104,7 @@ class IceCreamMachine:
         if self.remaining_toppings <= 0:
             raise ExceededRemainingChoicesException
         for t in self.toppings:
-            if t.name.lower() == choice:
+            if t.name.lower() == choice and self.currently_selecting == STAGE.Toppings:
                 t.use()
                 self.inprogress_icecream.append(t)
                 self.remaining_toppings -= 1
@@ -156,7 +156,7 @@ class IceCreamMachine:
         total_cost = 0
         for i in self.inprogress_icecream:
             total_cost += i.cost
-        return total_cost
+        return total_cost 
 
     def run(self):
         
@@ -167,10 +167,15 @@ class IceCreamMachine:
             UCID: oh45
             1)InvalidChoiceException: The InvalidChoiceException is handled by try except block.
             When the exception is thrown the user is given appropriate message and the run()
-            is called again to ask user for another input.  
+            is called again to ask user
+            for another input.  
             '''    
             try:
-                self.handle_container(container)
+                self.handle_container(container.lower())
+            except  OutOfStockException:
+                print(f"The container '{container}' you selected in out of stock.")
+                print("Please select from avialable ones")
+                self.run()
             except InvalidChoiceException:
                 print("Invalid Choice.Please select valid choice from below list")
                 self.run()
@@ -192,7 +197,11 @@ class IceCreamMachine:
                 and calling run() recursively.
             ''' 
             try:
-                self.handle_flavor(flavor)
+                self.handle_flavor(flavor.lower())
+            except  OutOfStockException:
+                print(f"The flavour '{flavor}' you selected in out of stock.")
+                print("Please select from avialable ones")
+                self.run()
             except InvalidChoiceException:
                 print("Invalid Choice.Please select valid choice from below list")
                 self.run()
@@ -207,6 +216,7 @@ class IceCreamMachine:
                 self.run()    
         elif self.currently_selecting == STAGE.Toppings:
             toppings = input(f"Would you like {', '.join(list(map(lambda t:t.name.lower(), filter(lambda t: t.in_stock(), self.toppings))))}? Or type done.\n")
+
             ''' 
             Name: Omkar Karbhari Hadawale
             UCID: oh45
@@ -219,12 +229,16 @@ class IceCreamMachine:
                 and calling run() recursively.
             ''' 
             try:
-                self.handle_toppings(toppings)
+                self.handle_toppings(toppings.lower())
+            except  OutOfStockException:
+                print(f"The topping '{toppings}' you selected in out of stock.")
+                print("Please select from avialable ones")
+                self.run()
             except InvalidChoiceException:
                 print("Invalid Choice.Please select valid choice from below list")
                 self.run()
             except ExceededRemainingChoicesException:
-                print(f"Max toppings exceeded. You can select maximum of {self.MAX_SCOOPS} toppings.\nPlease checkout and make payment")
+                print(f"Max toppings exceeded. You can select maximum of {self.MAX_SCOOPS} toppings./n Please checkout and make payment")
                 self.currently_selecting = STAGE.Pay
                 self.run()    
         elif self.currently_selecting == STAGE.Pay:
