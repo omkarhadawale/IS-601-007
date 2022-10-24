@@ -243,7 +243,7 @@ class IceCreamMachine:
                 self.run()    
         elif self.currently_selecting == STAGE.Pay:
             expected = self.calculate_cost()
-            total = input(f"Your total is {expected}, please enter the exact value.\n")
+            total = input(f"Your total is $ {expected}, please enter the exact value.\n")
             ''' 
             Name: Omkar Karbhari Hadawale
             UCID: oh45
