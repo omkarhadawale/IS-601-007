@@ -169,6 +169,8 @@ class IceCreamMachine:
             When the exception is thrown the user is given appropriate message and the run()
             is called again to ask user
             for another input.  
+            2)OutOfStockException: The out of stock exception is handled by try except block.
+            when the exception is thrown the user is given prompt to select from available choices.
             '''    
             try:
                 self.handle_container(container.lower())
@@ -195,6 +197,8 @@ class IceCreamMachine:
                 block.When the exception is thrown the user is prompted that you have exceeded the maximum limit to select 
                 the item and the user is directed to the next stage by setting the currently_selecting variable to next stage 
                 and calling run() recursively.
+            4)OutOfStockException: The out of stock exception is handled by try except block.
+            when the exception is thrown the user is given prompt to select from available choices.
             ''' 
             try:
                 self.handle_flavor(flavor.lower())
@@ -227,6 +231,8 @@ class IceCreamMachine:
                 block.When the exception is thrown the user is prompted that you have exceeded the maximum limit to select 
                 the item and the user is directed to the next stage by setting the currently_selecting variable to next stage 
                 and calling run() recursively.
+            3)OutOfStockException: The out of stock exception is handled by try except block.
+                when the exception is thrown the user is given prompt to select from available choices.    
             ''' 
             try:
                 self.handle_toppings(toppings.lower())
@@ -249,7 +255,7 @@ class IceCreamMachine:
             UCID: oh45
             1)InvalidPaymentException: The InvalidChoiceException is handled by try except block.
                 When the exception is thrown the user is to ask user to enter exact amount to complete the payment
-                and the run() is called again recursively till the user enters exact value.
+                and the run() is called again recursively till the user enters exact value.     
             ''' 
             try:
                 self.handle_pay(expected, total)
