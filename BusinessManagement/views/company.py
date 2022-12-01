@@ -35,26 +35,47 @@ def search():
 def add():
     if request.method == "POST":
         # TODO add-1 retrieve form data for name, address, city, state, country, zip, website
+        name = request.form.get("name", None)
+        print(type(name))
+        address = request.form.get("address", None)
+        city = request.form.get("city", None)
+        print(len(city))
+        website = request.form.get("website", None)
+        state = request.form.get("state", None)
+        print(len(state))
+
+        country = request.form.get("country", None)
         # TODO add-2 name is required (flash proper error message)
+        if len(name) == 0:
+            flash("Name field is required","warning")
         # TODO add-3 address is required (flash proper error message)
+        if len(address) == 0:
+            flash("Address field is required","warning")
         # TODO add-4 city is required (flash proper error message)
+        if len(city) == 0:
+            flash("City field is required","warning")
         # TODO add-5 state is required (flash proper error message)
+        if len(state) == 0:
+            flash("State field is required","warning")
         # TODO add-6 country is required (flash proper error message)
+        if len(country) == 0:
+            flash("Country field is required","warning")
         # TODO add-7 website is not required
-        
+        flash("Website field is optional","")
         has_error = False # use this to control whether or not an insert occurs
         
 
         if not has_error:
-            try:
-                result = DB.insertOne("""
-                INSERT QUERY
-                """, ) # <-- TODO add-8 add query and add arguments
-                if result.status:
-                    flash("Added Company", "success")
-            except Exception as e:
-                # TODO add-9 make message user friendly
-                flash(str(e), "danger")
+            pass
+            # try:
+            #     result = DB.insertOne("""
+            #     INSERT QUERY
+            #     """, ) # <-- TODO add-8 add query and add arguments
+            #     if result.status:
+            #         flash("Added Company", "success")
+            # except Exception as e:
+            #     # TODO add-9 make message user friendly
+            #     flash(str(e), "danger")
         
     return render_template("add_company.html")
 
