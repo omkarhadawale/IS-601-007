@@ -36,21 +36,30 @@ def search():
 def add():
     if request.method == "POST":
         # TODO add-1 retrieve form data for first_name, last_name, company, email
+        first_name = request.form.get("first_name", None)
+        last_name = request.form.get("last_name", None)
+        email = request.form.get("email", None)
+        company_id = request.form.get("company", None)
         # TODO add-2 first_name is required (flash proper error message)
+        if len(first_name) == 0:
+            flash("First Name field is required","warning")
         # TODO add-3 last_name is required (flash proper error message)
+        if len(last_name) == 0:
+            flash("Last Name field is required","warning")
         # TODO add-4 company (may be None)
+        if len(company_id) == 0:
+            flash("Company field is required","warning")
         # TODO add-5 email is required (flash proper error message)
-        
-        try:
-            result = DB.insertOne("""
-            INSERT QUERY
-            """,
-            ) # <-- TODO add-6 add query and add arguments
-            if result.status:
-                flash("Created Employee Record", "success")
-        except Exception as e:
-            # TODO add-7 make message user friendly
-            flash(str(e), "danger")
+        if len(email) == 0:
+            flash("Email field is required","warning")
+        if len(first_name) != 0 and len(last_name) != 0 and len(company_id) != 0 and len(email) != 0:
+            try:
+                result = DB.insertOne("INSERT INTO IS601_MP2_Employees (first_name,last_name,company_id,email) VALUES (%s,%s,%s,%s)",first_name,last_name,company_id,email) # <-- TODO add-6 add query and add arguments
+                if result.status:
+                    flash("Successfully added Employee", "success")
+            except Exception as e:
+                # TODO add-7 make message user friendly
+                flash(str(e), "danger")
     return render_template("add_employee.html")
 
 @employee.route("/edit", methods=["GET", "POST"])

@@ -50,10 +50,10 @@ def importCSV():
             if len(companies) > 0:
                 print(f"Inserting or updating {len(companies)} companies")
                 try:
-                    #result = DB.insertMany(company_query, companies)
+                    result = DB.insertMany(company_query, companies)
                     # TODO importcsv-5 display flash message about number of companies inserted
-                    
-                    flash(f"{len(companies)} company records were added into Database from csv file",'success')
+                    if result.status:
+                        flash(f"{len(companies)} company records were added into Database from csv file",'success')
                 except Exception as e:
                     traceback.print_exc()
                     flash("There was an error loading in the csv data", "danger")
@@ -63,9 +63,10 @@ def importCSV():
             if len(employees) > 0:
                 print(f"Inserting or updating {len(employees)} employees")
                 try:
-                    #result = DB.insertMany(employee_query, employees)
+                    result = DB.insertMany(employee_query, employees)
                     # TODO importcsv-7 display flash message about number of employees loaded
-                    flash(f"{len(employees)} employee records were added into Database from csv file",'success')
+                    if result.status:
+                        flash(f"{len(employees)} employee records were added into Database from csv file",'success')
                 except Exception as e:
                     traceback.print_exc()
                     flash("There was an error loading in the csv data", "danger")

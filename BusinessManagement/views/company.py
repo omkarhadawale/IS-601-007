@@ -36,15 +36,12 @@ def add():
     if request.method == "POST":
         # TODO add-1 retrieve form data for name, address, city, state, country, zip, website
         name = request.form.get("name", None)
-        print(type(name))
         address = request.form.get("address", None)
         city = request.form.get("city", None)
-        print(len(city))
         website = request.form.get("website", None)
         state = request.form.get("state", None)
-        print(len(state))
-
         country = request.form.get("country", None)
+        zip_code = request.form.get("zip", None)
         # TODO add-2 name is required (flash proper error message)
         if len(name) == 0:
             flash("Name field is required","warning")
@@ -67,15 +64,14 @@ def add():
 
         if not has_error:
             pass
-            # try:
-            #     result = DB.insertOne("""
-            #     INSERT QUERY
-            #     """, ) # <-- TODO add-8 add query and add arguments
-            #     if result.status:
-            #         flash("Added Company", "success")
-            # except Exception as e:
-            #     # TODO add-9 make message user friendly
-            #     flash(str(e), "danger")
+            try:
+                result = DB.insertOne("INSERT INTO IS601_MP2_Companies (name,address,city,country,state,zip,website) VALUES (%s,%s,%s,%s,%s,%s,%s)",name,address,city,country,state,zip_code,website) # <-- TODO add-8 add query and add arguments
+                if result.status:
+                    flash("Company added successfully", "success")
+            except Exception as e:
+                # TODO add-9 make message user friendly
+                flash("Something went wrong their was error creating the company","danger")
+                flash(str(e), "danger")
         
     return render_template("add_company.html")
 
