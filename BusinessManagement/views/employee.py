@@ -145,7 +145,7 @@ def delete():
         flash("Their was and issue deleting the employee","danger")
         flash(str(e), "danger")        
     # TODO delete-2 redirect to employee search
-    return redirect(url_for("employee.search"))
+    return redirect(url_for('employee.search', first_name="", last_name="", email="", company="", order="asc", column="", limit=10))
     # TODO delete-3 pass all argument except id to this route
     # TODO delete-4 ensure a flash message shows for successful delete
-    pass
+    
