@@ -131,33 +131,40 @@ def edit():
             # TODO edit-3 name is required (flash proper error message)
             if len(name) == 0:
                 flash("Name field is required","warning")
+                has_error = True
             # TODO edit-4 address is required (flash proper error message)
             if len(address) == 0:
                 flash("Address field is required","warning")
+                has_error = True
             # TODO edit-5 city is required (flash proper error message)
             if len(city) == 0:
                 flash("City field is required","warning")
+                has_error = True
             # TODO edit-6 state is required (flash proper error message)
             if len(state) == 0:
                 flash("State field is required","warning")
+                has_error = True
             # TODO edit-7 country is required (flash proper error message)
             if len(country) == 0:
                 flash("Country field is required","warning")
+                has_error = True
             if len(zip_code) == 0:
                 flash("Zip Code field is required","warning")
+                has_error = True
             # TODO edit-8 website is not required
             flash("Website field is optional","")
             # 
             # note: call zip variable zipcode as zip is a built in function it could lead to issues
             #data = [name, address, city, state, country, zipcode, website]
-
+            data = [name,address,city,state,country,zip_code,website]
             data.append(id)
-            if len(name)!=0 and len(address)!=0 and len(city)!=0 and len(zip_code)!=0 and len(website):
+            if not has_error:
                 try:
                     # TODO edit-9 fill in proper update query
-                    result = DB.update(f"UPDATE IS601_Sample SET name={name},address={address},city={city},state={state},country={country},zip={zip_code},website={website} WHERE id = {id}")
+                    result = DB.update("UPDATE IS601_MP2_Companies SET name=%s,address=%s,city=%s,state=%s,country=%s,zip=%s,website=%s WHERE id=%s",*data)
                     if result.status:
                         flash("Updated record", "success")
+                        return redirect(url_for('company.search', name="", country="", state="",order="asc", column="", limit=10))
                 except Exception as e:
                     # TODO edit-10 make this user-friendly
                     flash("Their was and issue updating the record","danger")
@@ -174,7 +181,7 @@ def edit():
     else:
         flash("No such record exists that is being updated","warning")       
     # TODO edit-13 pass the company data to the render template
-    return render_template("edit_company.html",row=row)
+    return render_template("edit_company.html",company=row)
 
 @company.route("/delete", methods=["GET"])
 def delete():

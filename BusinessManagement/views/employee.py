@@ -12,10 +12,10 @@ def search():
     args = [] # <--- append values to replace %s placeholders
     allowed_columns = ["first_name", "last_name", "email", "company_name"]
     # TODO search-2 get fn, ln, email, company, column, order, limit from request args
-    fn =  request.args.get("firstname")
-    ln =  request.args.get("lastname")
+    fn =  request.args.get("first_name")
+    ln =  request.args.get("last_name")
     email = request.args.get("email")
-    company_id = request.args.get("company_id")
+    company_id = request.args.get("company")
     col =  request.args.get("field")
     order = request.args.get("order")
     limit = request.args.get("limit")
@@ -101,37 +101,52 @@ def add():
 @employee.route("/edit", methods=["GET", "POST"])
 def edit():
     # TODO edit-1 request args id is required (flash proper error message)
-    if True: # TODO update this for TODO edit-1
+    id = request.args.get("id")
+    if id: # TODO update this for TODO edit-1 
+        data = []
         if request.method == "POST":
             # TODO edit-1 retrieve form data for first_name, last_name, company, email
+            first_name = request.form.get("first_name")
+            last_name = request.form.get("last_name")
+            company = request.form.get("company")
+            email = request.form.get("email")
             # TODO edit-2 first_name is required (flash proper error message)
+            if len(first_name) == 0:
+                flash("First Name field is required","warning")
+                has_error = True
             # TODO edit-3 last_name is required (flash proper error message)
+            if len(last_name) == 0:
+                flash("Last Name field is required","warning")
+                has_error = True
             # TODO edit-4 company may be None
+            flash("Company field is optional")
             # TODO edit-5 email is required (flash proper error message)
-            
-            # data = [first_name, last_name, company_id, email]
+            if len(email) == 0:
+                flash("Email field is required","warning")
+                has_error = True
+            data = [first_name, last_name, company, email]
             data.append(id)
             try:
                 # TODO edit-6 fill in proper update query
                 result = DB.update("""
-                UPDATE QUERY
-                """, *data)
+                UPDATE IS601_MP2_Employees SET first_name=%s,last_name=%s,company_id=%s,email=%s WHERE id=%s""", *data)
                 if result.status:
                     flash("Updated record", "success")
+                    return redirect(url_for('employee.search', first_name="", last_name="", email="", company="", order="asc", column="", limit=10))
             except Exception as e:
                 # TODO edit-7 make this user-friendly
                 flash(e, "danger")
         try:
             # TODO edit-8 fetch the updated data (including company_name)
             # company_name should be 'N/A' if the employee isn't assigned to a copany
-            result = DB.selectOne("SELECT ... FROM ... LEFT JOIN ...  WHERE ...", id)
+            result = DB.selectOne("SELECT employees.id as id, first_name, last_name, email, companies.id as company_id, IF(name is not null, name,'N/A') as company_name FROM IS601_MP2_Employees employees LEFT JOIN IS601_MP2_Companies companies ON employees.company_id=companies.id WHERE employees.id=%s", id)
             if result.status:
                 row = result.row
         except Exception as e:
             # TODO edit-9 make this user-friendly
             flash(str(e), "danger")
     # TODO edit-10 pass the employee data to the render template
-    return render_template("edit_employee.html", ...)
+    return render_template("edit_employee.html",employee=row)
 
 @employee.route("/delete", methods=["GET"])
 def delete():
