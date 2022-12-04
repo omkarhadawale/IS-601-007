@@ -8,18 +8,53 @@ def search():
     rows = []
     # DO NOT DELETE PROVIDED COMMENTS
     # TODO search-1 retrieve employee id as id, first_name, last_name, email, company_id, company_name using a LEFT JOIN
-    query = "SELECT ... WHERE 1=1"
+    query = "SELECT id, first_name, last_name, company_id, email FROM IS601_MP2_Employees WHERE 1=1"
     args = [] # <--- append values to replace %s placeholders
     allowed_columns = ["first_name", "last_name", "email", "company_name"]
     # TODO search-2 get fn, ln, email, company, column, order, limit from request args
+    fn =  request.args.get("firstname")
+    ln =  request.args.get("lastname")
+    email = request.args.get("email")
+    company_id = request.args.get("company_id")
+    col =  request.args.get("field")
+    order = request.args.get("order")
+    limit = request.args.get("limit")
     # TODO search-3 append like filter for first_name if provided
+    if fn:
+        query += " AND first_name like %s"
+        args.append(f"%{fn}%")
     # TODO search-4 append like filter for last_name if provided
+    if ln:
+        query += " AND last_name like %s"
+        args.append(f"%{ln}%")
     # TODO search-5 append like filter for email if provided
+    if email:
+        query += " AND email like %s"
+        args.append(f"%{email}%")
     # TODO search-6 append equality filter for company_id if provided
+    if company_id:
+        query += " AND company_id=%s"
+        args.append(f"%{company_id}%")
     # TODO search-7 append sorting if column and order are provided and within the allowed columns and order options (asc, desc)
+    if col and order:
+            if col in ["id", "first_name", "last_name", "company_id", "email","created","modified"] \
+            and order in ["asc", "desc"]:
+                query += f" ORDER BY {col} {order}"
     # TODO search-8 append limit (default 10) or limit greater than 1 and less than or equal to 100
+    if limit!=None:
+        if limit and int(limit) > 0 and int(limit) <= 100:
+            query += " LIMIT %s"
+            args.append(int(limit))
     # TODO search-9 provide a proper error message if limit isn't a number or if it's out of bounds
-    
+        else:
+            flash("Limit out of bound(1 to 100) or not selected","warning")
+            query += " LIMIT %s"
+            limit = 10
+            args.append(int(limit))
+    else:
+        limit = 10
+        query += " LIMIT %s"
+        args.append(int(limit))         
     print("query",query)
     print("args", args)
     try:
@@ -30,6 +65,7 @@ def search():
         # TODO search-10 make message user friendly
         flash(e, "error")
     # hint: use allowed_columns in template to generate sort dropdown
+    allowed_columns = [(v,v) for v in allowed_columns]
     return render_template("list_employees.html", rows=rows, allowed_columns=allowed_columns)
 
 @employee.route("/add", methods=["GET","POST"])
