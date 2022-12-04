@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, redirect, render_template, request, flash, url_for
 from sql.db import DB
 employee = Blueprint('employee', __name__, url_prefix='/employee')
 
@@ -136,7 +136,16 @@ def edit():
 @employee.route("/delete", methods=["GET"])
 def delete():
     # TODO delete-1 delete employee by id
+    id = request.args.get("id")
+    try:
+        result = DB.delete(f"DELETE FROM IS601_MP2_Employees WHERE id={id}")
+        if result.status:
+            flash("Successfully deleted employees", "success")
+    except Exception as e:
+        flash("Their was and issue deleting the employee","danger")
+        flash(str(e), "danger")        
     # TODO delete-2 redirect to employee search
+    return redirect(url_for("employee.search"))
     # TODO delete-3 pass all argument except id to this route
     # TODO delete-4 ensure a flash message shows for successful delete
     pass

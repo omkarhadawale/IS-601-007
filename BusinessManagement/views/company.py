@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, flash
+from flask import Blueprint, redirect, render_template, request, flash, url_for
 from sql.db import DB
 company = Blueprint('company', __name__, url_prefix='/company')
 
@@ -114,9 +114,11 @@ def add():
 @company.route("/edit", methods=["GET", "POST"])
 def edit():
     # TODO edit-1 request args id is required (flash proper error message)
-    id = request.form.get("id")
+    id = request.args.get("id")
     if id: # TODO update this for TODO edit-1
         data = []
+        # allowed_columns = ["name", "city", "country", "state"]
+        has_error = False
         if request.method == "POST":
             # TODO edit-2 retrieve form data for name, address, city, state, country, zip, website
             name = request.form.get("name", None)
@@ -148,34 +150,49 @@ def edit():
             # 
             # note: call zip variable zipcode as zip is a built in function it could lead to issues
             #data = [name, address, city, state, country, zipcode, website]
+
             data.append(id)
-            try:
-                # TODO edit-9 fill in proper update query
-                result = DB.update("UPDATE IS601_Sample SET val = %s WHERE id = %s",*data)
-                if result.status:
-                    flash("Updated record", "success")
-            except Exception as e:
-                # TODO edit-10 make this user-friendly
-                flash(str(e), "danger")
+            if len(name)!=0 and len(address)!=0 and len(city)!=0 and len(zip_code)!=0 and len(website):
+                try:
+                    # TODO edit-9 fill in proper update query
+                    result = DB.update(f"UPDATE IS601_Sample SET name={name},address={address},city={city},state={state},country={country},zip={zip_code},website={website} WHERE id = {id}")
+                    if result.status:
+                        flash("Updated record", "success")
+                except Exception as e:
+                    # TODO edit-10 make this user-friendly
+                    flash("Their was and issue updating the record","danger")
+                    flash(str(e), "danger")
         try:
             # TODO edit-11 fetch the updated data
-            result = DB.selectOne("SELECT ... FROM IS601_MP2_Companies ...", id)
+            result = DB.selectOne("SELECT id, name, address, city, country , state, zip, website, created, modified FROM IS601_MP2_Companies WHERE id=%s", id)
             if result.status:
                 row = result.row
-                
         except Exception as e:
             # TODO edit-12 make this user-friendly
+            flash("Their was and error retriving updated record")
             flash(str(e), "danger")
     else:
-        flash("No such record exists that is being updated","warning")
-        return redirect("company.search")        
+        flash("No such record exists that is being updated","warning")       
     # TODO edit-13 pass the company data to the render template
-    return render_template("edit_company.html")
+    return render_template("edit_company.html",row=row)
 
 @company.route("/delete", methods=["GET"])
 def delete():
     # TODO delete-1 delete company by id (unallocate any employees)
+    id = request.args.get("id")
+    try:
+        result = DB.update(f"UPDATE IS601_MP2_Employees SET company_id=NULL WHERE company_id={id}")
+        if result.status:
+            flash("Successfully unallocated employees in the company", "success")
+        result1 = DB.delete(f"DELETE FROM IS601_MP2_Companies WHERE id={id}")    
+        if result1.status:
+            flash("Successfully deleted the company", "success")
+    except Exception as e:
+        flash("Their was and issue unallocating the employees or deleting the company","danger")
+        flash(str(e), "danger")
+
     # TODO delete-2 redirect to company search
+    return redirect(url_for('company.search', name="", country="", state="",order="asc", column="", limit=10))
     # TODO delete-3 pass all argument except id to this route
     # TODO delete-4 ensure a flash message shows for successful delete
-    pass
+    
