@@ -1,0 +1,166 @@
+from flask import Blueprint, redirect, render_template, request, flash, url_for
+from sql.db import DB
+employee = Blueprint('employee', __name__, url_prefix='/employee')
+
+
+@employee.route("/search", methods=["GET"])
+def search():
+    rows = []
+    # DO NOT DELETE PROVIDED COMMENTS
+    # TODO search-1 retrieve employee id as id, first_name, last_name, email, company_id, company_name using a LEFT JOIN
+    query = "SELECT id, first_name, last_name, company_id, email FROM IS601_MP2_Employees WHERE 1=1"
+    args = [] # <--- append values to replace %s placeholders
+    allowed_columns = ["first_name", "last_name", "email", "company_name"]
+    # TODO search-2 get fn, ln, email, company, column, order, limit from request args
+    fn =  request.args.get("first_name")
+    ln =  request.args.get("last_name")
+    email = request.args.get("email")
+    company_id = request.args.get("company")
+    col =  request.args.get("field")
+    order = request.args.get("order")
+    limit = request.args.get("limit")
+    # TODO search-3 append like filter for first_name if provided
+    if fn:
+        query += " AND first_name like %s"
+        args.append(f"%{fn}%")
+    # TODO search-4 append like filter for last_name if provided
+    if ln:
+        query += " AND last_name like %s"
+        args.append(f"%{ln}%")
+    # TODO search-5 append like filter for email if provided
+    if email:
+        query += " AND email like %s"
+        args.append(f"%{email}%")
+    # TODO search-6 append equality filter for company_id if provided
+    if company_id:
+        query += " AND company_id=%s"
+        args.append(f"%{company_id}%")
+    # TODO search-7 append sorting if column and order are provided and within the allowed columns and order options (asc, desc)
+    if col and order:
+            if col in ["id", "first_name", "last_name", "company_id", "email","created","modified"] \
+            and order in ["asc", "desc"]:
+                query += f" ORDER BY {col} {order}"
+    # TODO search-8 append limit (default 10) or limit greater than 1 and less than or equal to 100
+    if limit!=None:
+        if limit and int(limit) > 0 and int(limit) <= 100:
+            query += " LIMIT %s"
+            args.append(int(limit))
+    # TODO search-9 provide a proper error message if limit isn't a number or if it's out of bounds
+        else:
+            flash("Limit out of bound(1 to 100) or not selected","warning")
+            query += " LIMIT %s"
+            limit = 10
+            args.append(int(limit))
+    else:
+        limit = 10
+        query += " LIMIT %s"
+        args.append(int(limit))         
+    print("query",query)
+    print("args", args)
+    try:
+        result = DB.selectAll(query, *args)
+        if result.status:
+            rows = result.rows
+    except Exception as e:
+        # TODO search-10 make message user friendly
+        flash(e, "error")
+    # hint: use allowed_columns in template to generate sort dropdown
+    allowed_columns = [(v,v) for v in allowed_columns]
+    return render_template("list_employees.html", rows=rows, allowed_columns=allowed_columns)
+
+@employee.route("/add", methods=["GET","POST"])
+def add():
+    if request.method == "POST":
+        # TODO add-1 retrieve form data for first_name, last_name, company, email
+        first_name = request.form.get("first_name", None)
+        last_name = request.form.get("last_name", None)
+        email = request.form.get("email", None)
+        company_id = request.form.get("company", None)
+        # TODO add-2 first_name is required (flash proper error message)
+        if len(first_name) == 0:
+            flash("First Name field is required","warning")
+        # TODO add-3 last_name is required (flash proper error message)
+        if len(last_name) == 0:
+            flash("Last Name field is required","warning")
+        # TODO add-4 company (may be None)
+        if len(company_id) == 0:
+            flash("Company field is required","warning")
+        # TODO add-5 email is required (flash proper error message)
+        if len(email) == 0:
+            flash("Email field is required","warning")
+        if len(first_name) != 0 and len(last_name) != 0 and len(company_id) != 0 and len(email) != 0:
+            try:
+                result = DB.insertOne("INSERT INTO IS601_MP2_Employees (first_name,last_name,company_id,email) VALUES (%s,%s,%s,%s)",first_name,last_name,company_id,email) # <-- TODO add-6 add query and add arguments
+                if result.status:
+                    flash("Successfully added Employee", "success")
+            except Exception as e:
+                # TODO add-7 make message user friendly
+                flash(str(e), "danger")
+    return render_template("add_employee.html")
+
+@employee.route("/edit", methods=["GET", "POST"])
+def edit():
+    # TODO edit-1 request args id is required (flash proper error message)
+    id = request.args.get("id")
+    if id: # TODO update this for TODO edit-1 
+        data = []
+        if request.method == "POST":
+            # TODO edit-1 retrieve form data for first_name, last_name, company, email
+            first_name = request.form.get("first_name")
+            last_name = request.form.get("last_name")
+            company = request.form.get("company")
+            email = request.form.get("email")
+            # TODO edit-2 first_name is required (flash proper error message)
+            if len(first_name) == 0:
+                flash("First Name field is required","warning")
+                has_error = True
+            # TODO edit-3 last_name is required (flash proper error message)
+            if len(last_name) == 0:
+                flash("Last Name field is required","warning")
+                has_error = True
+            # TODO edit-4 company may be None
+            flash("Company field is optional")
+            # TODO edit-5 email is required (flash proper error message)
+            if len(email) == 0:
+                flash("Email field is required","warning")
+                has_error = True
+            data = [first_name, last_name, company, email]
+            data.append(id)
+            try:
+                # TODO edit-6 fill in proper update query
+                result = DB.update("""
+                UPDATE IS601_MP2_Employees SET first_name=%s,last_name=%s,company_id=%s,email=%s WHERE id=%s""", *data)
+                if result.status:
+                    flash("Updated record", "success")
+                    return redirect(url_for('employee.search', first_name="", last_name="", email="", company="", order="asc", column="", limit=10))
+            except Exception as e:
+                # TODO edit-7 make this user-friendly
+                flash(e, "danger")
+        try:
+            # TODO edit-8 fetch the updated data (including company_name)
+            # company_name should be 'N/A' if the employee isn't assigned to a copany
+            result = DB.selectOne("SELECT employees.id as id, first_name, last_name, email, companies.id as company_id, IF(name is not null, name,'N/A') as company_name FROM IS601_MP2_Employees employees LEFT JOIN IS601_MP2_Companies companies ON employees.company_id=companies.id WHERE employees.id=%s", id)
+            if result.status:
+                row = result.row
+        except Exception as e:
+            # TODO edit-9 make this user-friendly
+            flash(str(e), "danger")
+    # TODO edit-10 pass the employee data to the render template
+    return render_template("edit_employee.html",employee=row)
+
+@employee.route("/delete", methods=["GET"])
+def delete():
+    # TODO delete-1 delete employee by id
+    id = request.args.get("id")
+    try:
+        result = DB.delete(f"DELETE FROM IS601_MP2_Employees WHERE id={id}")
+        if result.status:
+            flash("Successfully deleted employees", "success")
+    except Exception as e:
+        flash("Their was and issue deleting the employee","danger")
+        flash(str(e), "danger")        
+    # TODO delete-2 redirect to employee search
+    return redirect(url_for('employee.search', first_name="", last_name="", email="", company="", order="asc", column="", limit=10))
+    # TODO delete-3 pass all argument except id to this route
+    # TODO delete-4 ensure a flash message shows for successful delete
+    

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Edit Company{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="h1">Edit Company</div>
+    <div>
+        <form method="POST">
+            {#
+            generate fields with proper types for
+            name
+            address
+            city
+            website
+            and prefill the fields with loaded company data
+            #}
+            <div class="form-group mb-3">
+                <label class="form-label" for="name">Name</label>
+                <input class="form-control" type='text'id='name' name='name'value="{{company.name}}"/>
+                </div>
+                <!-- required -->
+        
+                <div class="form-group mb-3">
+                <label class="form-label" for="name">Address</label>
+                <input class="form-control" type='text' id='address'name='address'value="{{company.address}}" />
+                </div>
+        
+                <div class="form-group mb-3">
+                <label lass="form-label"for="name">City</label>
+                <input class="form-control" type='text'value="{{company.city}}"id='city'name='city' />
+                </div>
+        
+                <div class="form-group mb-3">
+                <label lass="form-label" for="name">Website</label>
+                <input class="form-control" type='text' value="{{company.website}}"id='website'name='website' />
+                </div>
+        
+                {% include "country_state_selector.html" %}
+                <div class="form-group mb-3">
+                    <label lass="form-label" for="zip">Zip Code</label>
+                    <input class="form-control" type='text' id='zip'name='zip'value="{{company.zip}}" />
+                </div>
+            <input type="submit" class="btn btn-primary" value="Save Company" />
+        </form>
+    </div>
+</div>
+{% endblock %}
