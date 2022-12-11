@@ -3,7 +3,7 @@ from wtforms import EmailField, PasswordField, SubmitField, StringField
 from wtforms.validators import DataRequired, Email, InputRequired, EqualTo, Length
 
 class RegisterForm(FlaskForm):
-    username = StringField("username",validators=[InputRequired()])
+    username = StringField("username",validators=[InputRequired(),Length(min=2, max=20, message="The username should be minimum 2 characters in length")])
     email = EmailField("email", validators=[DataRequired(), Email()])
     password = PasswordField("password", validators=[InputRequired(), EqualTo('confirm', message='Passwords must match'),Length(min=6, max=20, message="The password should be minimum 6 characters in length")])
     confirm = PasswordField("confirm", validators=[DataRequired()])
