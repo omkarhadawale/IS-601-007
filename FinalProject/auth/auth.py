@@ -124,8 +124,15 @@ def landing_page():
                         flash("Their was an error updating user session","danger")
                         flash(f"Error message:-{str(e)}","danger")    
             except Exception as e:
-                flash("Theie was an error updating username/email","danger")
-                flash(f"Error message:- {str(e)}","danger")
+            #UCID:-oh45
+                if re.search(f"Duplicate entry",str(e)):
+                    if re.search(f"{email}",str(e)):
+                        flash(f"{email} is not available(Email is already registered)","warning")
+                    if re.search(f"{username}",str(e)):
+                        flash(f"Username:-{username} is already taken","warning")
+                else:        
+                    flash("Theie was an error updating username/email","danger")
+                    flash(f"Error message:- {str(e)}","danger")
     #UCID:-oh45
     if passform.validate_on_submit():        
         oldpassword = passform.oldpassword.data
@@ -147,9 +154,6 @@ def landing_page():
         except Exception as e:
             flash("Their was an error updating the password")
             flash(f"Error message:-{str(e)}","danger")
-
-
-
     return render_template("landing_page.html", form=userform, form1=passform)
 
 @auth.route("/logout", methods=["GET"])
