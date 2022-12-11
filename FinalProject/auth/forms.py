@@ -15,7 +15,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 class UserProfileEdit(FlaskForm):
-    username  = StringField("username",validators=[InputRequired()])
+    username  = StringField("username",validators=[InputRequired(),Length(min=2, max=20, message="The username should be minimum 2 characters in length")])
     email = EmailField("email", validators=[DataRequired(), Email()])
     submit = SubmitField("Update")
 
