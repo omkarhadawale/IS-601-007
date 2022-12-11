@@ -20,7 +20,7 @@ class UserProfileEdit(FlaskForm):
     submit = SubmitField("Update")
 
 class ChangeUserPassword(FlaskForm):
-    oldpassword = PasswordField("old password", validators=[InputRequired()])
+    oldpassword = PasswordField("old password", validators=[InputRequired(),Length(min=6, max=20, message="The password should be minimum 6 characters in length")])
     newpassword = PasswordField("new password", validators=[InputRequired(), EqualTo('confirmnewpassword', message='Passwords must match'),Length(min=6, max=20, message="The password should be minimum 6 characters in length")])
     confirmnewpassword = PasswordField("confirm new password", validators=[DataRequired()])
     submit = SubmitField("Set Password")
