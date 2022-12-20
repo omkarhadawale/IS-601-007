@@ -30,3 +30,19 @@ class CreateNewBankAccount(FlaskForm):
     accountType = StringField("Account Type",validators=[InputRequired()])
     initialDeposit = IntegerField("Initial Deposit",validators=[InputRequired(),NumberRange(min=1, message="Initial deposit should be greater than zero")])
     submit = SubmitField("Create")
+
+class DepositMoney(FlaskForm):
+    accountNo = StringField("Account No")
+    amount = IntegerField("Deposit Amount",validators=[InputRequired(),NumberRange(min=1, message="Deposit should be greater than zero")]) 
+    submit = SubmitField("Deposit")
+
+class WithDrawMoney(FlaskForm):
+    accountNo = StringField("Account No")
+    amount = IntegerField("WithDraw Amount",validators=[InputRequired(),NumberRange(min=1, message="Deposit should be greater than zero")]) 
+    submit = SubmitField("WithDraw")
+
+class TransferMoney(FlaskForm):
+    srcAccountNo = StringField("From Account No")
+    destAccountNo = StringField("Transfer to Account No",validators=[Length(min=12, max=12, message="The account no should be 12 digits in length")])
+    amount = IntegerField("Amount",validators=[InputRequired(),NumberRange(min=1, message="Deposit should be greater than zero")])
+    submit = SubmitField("Transfer")
