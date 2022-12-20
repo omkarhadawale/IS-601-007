@@ -1,7 +1,7 @@
 import json
 import re
 from flask import Blueprint, render_template, flash, redirect, url_for,current_app, session
-from auth.forms import ChangeUserPassword, LoginForm, RegisterForm, UserProfileEdit
+from auth.forms import ChangeUserPassword, LoginForm, RegisterForm, UserProfileEdit, CreateNewBankAccount
 from sql.db import DB
 
 from flask_login import login_user, login_required, logout_user
@@ -168,3 +168,64 @@ def logout():
                           identity=AnonymousIdentity())
     flash("Successfully logged out", "success")
     return redirect(url_for("auth.login"))
+
+
+@auth.route("/createBankAccount", methods=["GET","POST"])
+@login_required
+def createBankAccount():
+    user = json.loads(session["user"])
+    form = CreateNewBankAccount()
+    if form.validate_on_submit():
+        accountNo = form.accountNo.data
+        accountType = form.accountType.data
+        initialDeposit = form.initialDeposit.data
+        try:            
+            result = DB.insertOne("INSERT INTO IS601_S_Accounts (account, account_type, user_id, balance) VALUES (%s,%s,%s,%s)",accountNo, accountType, user['id'], initialDeposit)  
+            if result.status:
+                flash("Account Created Successfully","success")
+                result1 = DB.insertOne("INSERT INTO IS601_S_Transactions (src, dest, diff, reason, details) VALUES(%s, %s, %s ,'Initial deposit','New account opening initial deposit')", accountNo, accountNo, initialDeposit)    
+                if result1.status:
+                    flash("Transaction Successful","success")
+        except Exception as e:
+            #UCID:-oh45
+            if re.search(f"Duplicate entry",str(e)):
+                if re.search(f"{accountNo}",str(e)):
+                    flash(f"The account no:- {accountNo} is already taken.Please choose other account number","warning")
+                
+            else:
+                flash(f"{str(e)}","danger")     
+        
+
+    flash("createBankAccount","success")
+    return render_template("createBankAccount.html",form=form)
+
+
+
+@auth.route("/listBankAccount", methods=["GET"])
+@login_required
+def listBankAccount():
+    user = json.loads(session["user"])
+    rows = None
+    try:
+        result = DB.selectAll("SELECT account as Account,account_type as AccountType, balance as Balance, created, modified FROM IS601_S_Accounts WHERE user_id=%s",int(user['id']))  
+        if result.status and result.rows:
+            rows = result.rows
+    except Exception as e:
+        flash(f"{str(e)}","danger")
+    return render_template("listBankAccount.html", rows=rows,username=user['username'])
+
+
+
+@auth.route("/withdrawMoney", methods=["GET"])
+@login_required
+def withdrawMoney():
+    flash("withdrawMoney","success")
+    return render_template("withdrawMoney.html")
+
+
+
+@auth.route("/transferMoney", methods=["GET"])
+@login_required
+def transferMoney():
+    flash("transferMoney","success")
+    return render_template("transferMoney.html")   

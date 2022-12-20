@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}List of User Accounts{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h1>Welcome {{username}}</h1>
+    </br></br>
+    <div class="h1 text-center">Your Accounts</div>
+
+    <div class="table-responsive">
+    <table class="table">
+        {% if rows and rows|length > 0 %}
+        <thead>
+            <tr class="text-capitalize">
+                {# generate th tags for each column to display #}
+                {# IMPORTANT use table column names as the headings, replace _ with space #}
+                {% for r in rows[0] %}
+                <th>{{r}}</th>
+                {% endfor %}
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in rows %}
+        <tr>
+            {% for v in r.values() %}
+            <td>{{v}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+        {% else %}
+        <tbody>
+            <tr>
+                <td colspan="100%">No results to show</td>
+            </tr>
+        </tbody>
+        {% endif %}
+    </table>
+    </div>
+</div>
+{% endblock %}

@@ -17,12 +17,14 @@
                     <a class="nav-link" href="{{url_for('auth.register')}}">Register</a>
                 </li>
                 {% else %}
-                <!-- samples nav -->
-                {% set samples = [
-                ("sample.add", "Add"),
-                ("sample.list", "List"),
-                ] %}
-                {{dropdown_nav("Samples", samples)}}
+                <!-- Bank Functions nav -->
+                {% set bankFunctions = [
+                    ("auth.createBankAccount", "Create New Bank Account"),
+                    ("auth.listBankAccount", "List Bank Accounts"),
+                    ("auth.withdrawMoney", "Withdraw Money"),
+                    ("auth.transferMoney", "Transfer Money"),
+                    ] %}
+                    {{dropdown_nav("Bank Functions", bankFunctions)}}
                 <!-- roles nav (requires admin )-->
                 {% if current_user.has_role("Admin") %}
                 {% set roles = [
@@ -31,7 +33,12 @@
                 ("roles.assign", "Assign")
                 ] %}
                 {{dropdown_nav("Roles", roles)}}
+
+                
                 {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('auth.landing_page')}}">Edit Profile</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
                 </li>
