@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - dev
-      - Milestone-2
+      - MileStone-2
       - MiniProject-2
 
 # Your workflows jobs.
