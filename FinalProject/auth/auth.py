@@ -341,12 +341,16 @@ def listAccountTransactions():
     user = json.loads(session["user"])
     account = request.args.get("account")
     rows = None
+    balance = None
     try:
         result = DB.selectAll("SELECT * FROM IS601_S_Transactions WHERE src IN(SELECT id FROM IS601_S_Accounts WHERE account=%s) OR dest IN(SELECT id FROM IS601_S_Accounts WHERE account=%s)",account,account)  
         if result.status and result.rows:
             rows = result.rows
+        result1 = DB.selectOne("SELECT balance FROM IS601_S_Accounts WHERE account=%s", account)
+        if result1.status and result1.row:
+            balance = result1.row['balance']
     except Exception as e:
         flash(f"{str(e)}","danger")
 
-    return render_template("listAccountTransactions.html",rows=rows,account=account,username=user['username']) 
+    return render_template("listAccountTransactions.html",rows=rows,account=account,username=user['username'],balance=balance) 
     
