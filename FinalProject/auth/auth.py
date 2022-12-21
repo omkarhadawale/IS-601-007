@@ -295,14 +295,17 @@ def transferMoney():
     user = json.loads(session["user"])
     accounts = []
     form = TransferMoney()
+    is_same_account = False
     if form.validate_on_submit():
         srcAccountNo = form.srcAccountNo.data
         desAccountNo = form.destAccountNo.data
         amount = form.amount.data
+        if srcAccountNo==desAccountNo:
+            is_same_account = True
         try:
             result = DB.selectOne("SELECT balance FROM IS601_S_Accounts WHERE account=%s",srcAccountNo)
             result4 = DB.selectOne("SELECT * FROM IS601_S_Accounts WHERE account=%s",desAccountNo)
-            if result.status and result.row and result4.row:
+            if result.status and result.row and result4.row and not is_same_account:
                 if amount <= result.row['balance']:
                     result1 = DB.update("UPDATE IS601_S_Accounts SET balance=balance-%s WHERE account=%s", amount, srcAccountNo)
                     if result1.status:
@@ -317,10 +320,13 @@ def transferMoney():
                             result1 = DB.insertOne("INSERT INTO IS601_S_Transactions (src, dest, diff, reason, details) VALUES(%s , %s, %s ,'Transfer',\"From '%s' to '%s'\")", src_account_id, dest_account_id, amount, srcAccountNo, desAccountNo)    
                             if result1.status:
                                 flash("Transaction Successful Recorded","success")
-                else:
+                else:  
                     flash(f"You have insufficient balance to transfer the amount. Your current account balance is ${result.row['balance']}","warning")
             else:
-                flash(f"{desAccountNo} Invalid destination account Number(Account doesn't exist)","warning")
+                if is_same_account:
+                        flash("Invalid transfer you cannot transfer money to same account","warning")
+                else:
+                    flash(f"{desAccountNo} Invalid destination account Number(Account doesn't exist)","warning")
         except Exception as e:
             flash(f"{str(e)}","danger")    
 
