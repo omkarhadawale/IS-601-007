@@ -1,6 +1,6 @@
 <table><tr><td> <em>Assignment: </em> IS601 Milestone 2 Bank Project</td></tr>
 <tr><td> <em>Student: </em> Omkar Karbhari Hadawale (oh45)</td></tr>
-<tr><td> <em>Generated: </em> 12/21/2022 3:15:42 PM</td></tr>
+<tr><td> <em>Generated: </em> 12/21/2022 6:23:14 PM</td></tr>
 <tr><td> <em>Grading Link: </em> <a rel="noreferrer noopener" href="https://learn.ethereallab.app/homework/IS601-007-F22/is601-milestone-2-bank-project/grade/oh45" target="_blank">Grading</a></td></tr></table>
 <table><tr><td> <em>Instructions: </em> <ol><li>Checkout Milestone2 branch</li><li>Create a new markdown file called milestone2.md</li><li>git add/commit/push immediate</li><li>Fill in the below deliverables</li><li>At the end copy the markdown and paste it into milestone2.md</li><li>Add/commit/push the changes to Milestone2</li><li>PR Milestone2 to dev and verify</li><li>PR dev to prod and verify</li><li>Checkout dev locally and pull changes to get ready for Milestone 3</li><li>Submit the direct link to this new milestone2.md file from your GitHub prod branch to Canvas</li></ol><p>Note: Ensure all images appear properly on github and everywhere else. Images are only accepted from dev or prod, not local host. All website links must be from prod (you can assume/infer this by getting your dev URL and changing dev to prod).</p></td></tr></table>
 <table><tr><td> <em>Deliverable 1: </em> Create Accounts table and setup </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="http://via.placeholder.com/400x120/009955/fff?text=Complete"></td></tr>
@@ -41,7 +41,7 @@
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 2: </em> Explain which ones are working for this milestone</td></tr>
-<tr><td> <em>Response:</em> <p>All Links are working like:<div>1)Create New account</div><div>2)List accounts</div><div>3)Deposit Money&nbsp;</div><div>4)Withdraw Money</div><div><br></div><br></p><br></td></tr>
+<tr><td> <em>Response:</em> <p>All Links are working like:<div>1)Create New account(<a href="https://is601-oh45-prod-final.herokuapp.com/createBankAccount">https://is601-oh45-prod-final.herokuapp.com/createBankAccount</a>)</div><div>2)List accounts(<a href="https://is601-oh45-prod-final.herokuapp.com/listBankAccount">https://is601-oh45-prod-final.herokuapp.com/listBankAccount</a>)</div><div>3)Deposit Money(<a href="https://is601-oh45-prod-final.herokuapp.com/depositMoney">https://is601-oh45-prod-final.herokuapp.com/depositMoney</a>)</div><div>4)Withdraw Money (<a href="https://is601-oh45-prod-final.herokuapp.com/withdrawMoney">https://is601-oh45-prod-final.herokuapp.com/withdrawMoney</a>)</div><div><br></div><div><div><b><font size="5">Important</font></b></div><div><b><font size="4">The<br>above link requires a user to be logged in to access it create<br>a account here(</font></b><font size="4"><b><a href="https://is601-oh45-prod-final.herokuapp.com/register">https://is601-oh45-prod-final.herokuapp.com/register</a></b></font><b><font size="4">) and then login here(</font></b><font size="4"><b><a href="https://is601-oh45-prod-final.herokuapp.com/login">https://is601-oh45-prod-final.herokuapp.com/login</a></b></font><b><font size="4">)</font></b></div></div><div><br></div><br></p><br></td></tr>
 <tr><td> <em>Sub-Task 3: </em> Add related pull request link(s)</td></tr>
 <tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/omkarhadawale/IS-601-007/pull/8">https://github.com/omkarhadawale/IS-601-007/pull/8</a> </td></tr>
 </table></td></tr>
@@ -71,11 +71,11 @@
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 4: </em> Explain which account number generation you used and the account creation process including the transaction logic</td></tr>
-<tr><td> <em>Response:</em> <p>I am taking account number as input from the user where I have<br>added validations like the account number should be exactly 12 digits long. The<br>user which is logged in is associated with the account which<div>is created. The<br>user id is fetch from the session data.</div><br></p><br></td></tr>
+<tr><td> <em>Response:</em> <p>I am taking account number as input from the user where I have<br>added validations like the account number should be exactly 12 digits long. The<br>user which is logged in is associated with the account which<div>is created. The<br>user id is fetch from the session data.</div><div><br></div><div><div><b><font size="5">Important</font></b></div><div><b><font size="4">The below link requires<br>a user to be logged in to access it create a account here(</font></b>&lt;font<br>size=&quot;4&quot;&gt;<b><a href="https://is601-oh45-prod-final.herokuapp.com/register">https://is601-oh45-prod-final.herokuapp.com/register</a></b></font><b><font size="4">) and then login here(</font></b><font size="4"><b><a href="https://is601-oh45-prod-final.herokuapp.com/login">https://is601-oh45-prod-final.herokuapp.com/login</a></b></font><b><font size="4">)</font></b></div></div><br></p><br></td></tr>
 <tr><td> <em>Sub-Task 5: </em> Add related pull request link(s)</td></tr>
 <tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/omkarhadawale/IS-601-007/pull/8">https://github.com/omkarhadawale/IS-601-007/pull/8</a> </td></tr>
 <tr><td> <em>Sub-Task 6: </em> Add a direct link to heroku prod for this file</td></tr>
-<tr><td> <a rel="noreferrer noopener" target="_blank" href="https://is601-oh45-prod-final.herokuapp.com">https://is601-oh45-prod-final.herokuapp.com</a> </td></tr>
+<tr><td> <a rel="noreferrer noopener" target="_blank" href="https://is601-oh45-prod-final.herokuapp.com/createBankAccount">https://is601-oh45-prod-final.herokuapp.com/createBankAccount</a> </td></tr>
 </table></td></tr>
 <table><tr><td> <em>Deliverable 4: </em> User will be able to list their accounts </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="http://via.placeholder.com/400x120/009955/fff?text=Complete"></td></tr>
 <tr><td><table><tr><td> <em>Sub-Task 1: </em> Add a screenshot showing the user's account list view (show 5 accounts)</td></tr>
@@ -84,11 +84,11 @@
 </td></tr>
 </table></td></tr>
 <tr><td> <em>Sub-Task 2: </em> Briefly explain how the page is displayed and the data lookup occurs</td></tr>
-<tr><td> <em>Response:</em> <p>A select query selects accounts of user by where user id is equal<br>to logged in user which is stored in session. User accounts are retrieved<br>from database in form of list of dictionaries which is the passed&nbsp;<div>to jinja<br>template their the list is iterated and each dictionary values are printed in<br>respective rows.</div><br></p><br></td></tr>
+<tr><td> <em>Response:</em> <p>A select query selects accounts of user by where user id is equal<br>to logged in user which is stored in session. User accounts are retrieved<br>from database in form of list of dictionaries which is the passed&nbsp;<div>to jinja<br>template their the list is iterated and each dictionary values are printed in<br>respective rows.</div><div><br></div><div><div><b><font size="5">Important</font></b></div><div><b><font size="4">The below link requires a user to be logged in<br>to access it create a account here(</font></b><font size="4"><b><a href="https://is601-oh45-prod-final.herokuapp.com/register">https://is601-oh45-prod-final.herokuapp.com/register</a></b></font><b><font size="4">) and then login here(</font></b>&lt;font<br>size=&quot;4&quot;&gt;<b><a href="https://is601-oh45-prod-final.herokuapp.com/login">https://is601-oh45-prod-final.herokuapp.com/login</a></b></font><b><font size="4">)</font></b></div></div><br></p><br></td></tr>
 <tr><td> <em>Sub-Task 3: </em> Add related pull request link(s)</td></tr>
 <tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/omkarhadawale/IS-601-007/pull/8">https://github.com/omkarhadawale/IS-601-007/pull/8</a> </td></tr>
 <tr><td> <em>Sub-Task 4: </em> Add a direct link to heroku prod for this file</td></tr>
-<tr><td> <a rel="noreferrer noopener" target="_blank" href="https://is601-oh45-prod-final.herokuapp.com">https://is601-oh45-prod-final.herokuapp.com</a> </td></tr>
+<tr><td> <a rel="noreferrer noopener" target="_blank" href="https://is601-oh45-dev-final.herokuapp.com/listBankAccount">https://is601-oh45-dev-final.herokuapp.com/listBankAccount</a> </td></tr>
 </table></td></tr>
 <table><tr><td> <em>Deliverable 5: </em> Account Transaction Details </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="http://via.placeholder.com/400x120/009955/fff?text=Complete"></td></tr>
 <tr><td><table><tr><td> <em>Sub-Task 1: </em> Add a screenshot of an account's transaction history</td></tr>
