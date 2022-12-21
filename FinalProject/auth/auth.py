@@ -301,7 +301,8 @@ def transferMoney():
         amount = form.amount.data
         try:
             result = DB.selectOne("SELECT balance FROM IS601_S_Accounts WHERE account=%s",srcAccountNo)
-            if result.status and result.row:
+            result4 = DB.selectOne("SELECT * FROM IS601_S_Accounts WHERE account=%s",desAccountNo)
+            if result.status and result.row and result4.row:
                 if amount <= result.row['balance']:
                     result1 = DB.update("UPDATE IS601_S_Accounts SET balance=balance-%s WHERE account=%s", amount, srcAccountNo)
                     if result1.status:
@@ -318,7 +319,8 @@ def transferMoney():
                                 flash("Transaction Successful Recorded","success")
                 else:
                     flash(f"You have insufficient balance to transfer the amount. Your current account balance is ${result.row['balance']}","warning")
-
+            else:
+                flash(f"{desAccountNo} Invalid destination account Number(Account doesn't exist)","warning")
         except Exception as e:
             flash(f"{str(e)}","danger")    
 
