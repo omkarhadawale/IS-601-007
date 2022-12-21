@@ -346,11 +346,14 @@ def listAccountTransactions():
         result = DB.selectAll("SELECT * FROM IS601_S_Transactions WHERE src IN(SELECT id FROM IS601_S_Accounts WHERE account=%s) OR dest IN(SELECT id FROM IS601_S_Accounts WHERE account=%s)",account,account)  
         if result.status and result.rows:
             rows = result.rows
-        result1 = DB.selectOne("SELECT balance FROM IS601_S_Accounts WHERE account=%s", account)
+        result1 = DB.selectOne("SELECT account_type,balance,created,modified FROM IS601_S_Accounts WHERE account=%s", account)
         if result1.status and result1.row:
             balance = result1.row['balance']
+            accountType = result1.row['account_type']
+            created = result1.row['created']
+            modified = result1.row['modified']
     except Exception as e:
         flash(f"{str(e)}","danger")
 
-    return render_template("listAccountTransactions.html",rows=rows,account=account,username=user['username'],balance=balance) 
+    return render_template("listAccountTransactions.html",rows=rows,account=account,username=user['username'],balance=balance,accountType=accountType,created=created,modified=modified) 
     
